@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { Routes, Route} from "react-router-dom";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
@@ -12,32 +13,56 @@ function App() {
 
   const [clientList, setClientList] = useState();
 
-    const clientDown = (e) =>{
-       
-        axios
-        .get("http://localhost:5050/api/client/all")
-        .then((res)=>{
-            setClientList(res.data);
-            console.log(res);
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-    }
+  const clientDown = (e) => {
 
-    useEffect(()=>{
-        clientDown();
-    },[])
+    axios
+      .get("http://localhost:5050/api/client/all")
+      .then((res) => {
+        setClientList(res.data);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
-    console.log(clientList);
+  const clientDelete = (e, id) =>{
+
+    axios
+    .delete(`http://localhost:5050/api/client/remove/${id}`)
+    .then(()=>{
+      clientDown()
+    })
+  }
+
+  useEffect(() => {
+    clientDown();
+  }, [])
+
+  console.log(clientList);
 
 
   return (
-   <Container>
-    <h1>App</h1>
-      {clientList&&<BasicPanel clientList={clientList}/>}
-      {<AddClienPanel clientDown={clientDown}/>}
-   </Container>
+    <Container>
+      <Navbar bg="primary" variant="dark">
+        <Container>
+          <Navbar.Brand>CRMApp</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="AddClientPanel">Add Client</Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
+
+      <Routes>
+       <Route path="/" element={clientList && <BasicPanel clientList={clientList} clientDelete={clientDelete}/>} />
+       <Route path="AddClientPanel" element={<AddClienPanel clientDown={clientDown} />} />
+     </Routes>
+     
+
+    </Container>
+  
+
   );
 }
 

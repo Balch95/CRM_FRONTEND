@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table'
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -39,6 +39,7 @@ function BasicPanel(props) {
                                         </td>
                                     </tr>
                                 </tbody>
+                                <Button variant="danger" onClick={(e)=>{props.clientDelete(e, listObj._id)}}>Delete Client</Button>
                             </Table>
                         </Accordion.Body>
                     </Accordion.Item>
@@ -49,7 +50,7 @@ function BasicPanel(props) {
 
     return (
         <div>
-            <h1>Basic Panel</h1>
+            <h1>Client List</h1>
             <Accordion>
                 {liElements}
             </Accordion>

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Button, Form, Alert, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 import 'bootstrap/dist/css/bootstrap.css'
 import './AddClientPanel.css'
+
 
 
 
@@ -66,7 +67,8 @@ function AddClienPanel(props) {
 
 
         console.log(companyDataObj);
-        e.preventDefault()
+        
+        // e.preventDefault()
     }
 
     return (
