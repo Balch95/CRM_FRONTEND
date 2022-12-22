@@ -4,6 +4,7 @@ import axios from "axios";
 
 import 'bootstrap/dist/css/bootstrap.css'
 import './AddClientPanel.css'
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -17,6 +18,7 @@ function AddClienPanel(props) {
     const [number, setNumber] = useState();
     const [city, setCity] = useState();
     const [nip, setNip] = useState();
+    const navigate = useNavigate();
 
     const setCompayData = (e) => {
 
@@ -44,6 +46,7 @@ function AddClienPanel(props) {
 
 
     const addNewCompany = (e) => {
+        e.preventDefault()
         let companyDataObj = {
             companyName: companyName,
             address: {
@@ -59,8 +62,8 @@ function AddClienPanel(props) {
             'http://localhost:5050/api/client/add',
             companyDataObj,
         ).then((res) => {
-            props.clientDown()
             console.log(res);
+            navigate("/")
         }).catch((res, err) => {
             console.log(res, err);
         })
@@ -68,7 +71,7 @@ function AddClienPanel(props) {
 
         console.log(companyDataObj);
         
-        // e.preventDefault()
+        
     }
 
     return (

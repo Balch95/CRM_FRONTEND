@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 
 import BasicPanel from './BasicPanel/BasicPanel';
 import AddClienPanel from './AddClientPanel/AddClientPanel';
+import SingleClientPanel from './SingleClientPanel/SingleClientPanel';
 
 function App() {
 
-  const [clientList, setClientList] = useState();
+  const [clientList, setClientList] = useState([]);
 
   const clientDown = (e) => {
 
@@ -26,13 +27,13 @@ function App() {
       })
   }
 
-  const clientDelete = (e, id) =>{
+  const clientDelete = (e, id) => {
 
     axios
-    .delete(`http://localhost:5050/api/client/remove/${id}`)
-    .then(()=>{
-      clientDown()
-    })
+      .delete(`http://localhost:5050/api/client/remove/${id}`)
+      .then(() => {
+        clientDown()
+      })
   }
 
   useEffect(() => {
@@ -49,19 +50,20 @@ function App() {
           <Navbar.Brand>CRMApp</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="AddClientPanel">Add Client</Nav.Link>
+            <Nav.Link href="/AddClientPanel">Add Client</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
 
       <Routes>
-       <Route path="/" element={clientList && <BasicPanel clientList={clientList} clientDelete={clientDelete}/>} />
-       <Route path="AddClientPanel" element={<AddClienPanel clientDown={clientDown} />} />
-     </Routes>
-     
+        <Route path="/" element={<BasicPanel clientList={clientList} clientDelete={clientDelete} />} />
+        <Route path="/AddClientPanel" element={<AddClienPanel clientDown={clientDown} />} />
+        <Route path="/SingleClient/:id" element={<SingleClientPanel />} />
+      </Routes>
+
 
     </Container>
-  
+
 
   );
 }
