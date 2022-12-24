@@ -53,9 +53,10 @@ function AddClienPanel(props) {
                 city: city,
                 number: number,
                 street: street,
-                zipCode: zipCode
+                zipCode: zipCode,
             },
-            nip: nip
+            nip: nip,
+            action: []
         }
 
         axios.post(
