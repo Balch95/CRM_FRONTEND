@@ -2,12 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bootstrap";
+import { format } from "fecha";
 
 
 
 import 'bootstrap/dist/css/bootstrap.css'
 import AddActionPanel from "./AddActionPanel/AddActionPanel";
-
+import EditActionPanel from "./EditActionPanel/EditActionPanel";
 
 
 function SingleClientPanel() {
@@ -15,6 +16,9 @@ function SingleClientPanel() {
     const [client, setClient] = useState()
     const [editDataClientModal, setEditDataClientModal] = useState(false)
     const [actionPanelModal, setActionPanelModal] = useState(false)
+    const [actionEditPanelModal, setEditActionPanelModal] = useState(false)
+
+    const [editActionData, setEditActionData] = useState([])
 
     const [companyName, setCompanyName] = useState();
     const [street, setStreet] = useState();
@@ -101,11 +105,11 @@ function SingleClientPanel() {
             })
     }
 
-    const deleteAction = (clientActionId) =>{
+    const deleteAction = (clientActionId) => {
         axios.delete(
             `http://localhost:5050/api/action/remove/${client.data._id}`,
             {
-                data:{clientActionId:clientActionId}
+                data: { clientActionId: clientActionId }
             }
         ).then((res) => {
             console.log(res)
@@ -113,9 +117,9 @@ function SingleClientPanel() {
         }).catch((res, err) => {
             console.log(res, err);
         })
-        console.log(client.data._id)
-        console.log(clientActionId)
     }
+
+    
 
     let actionLiElement = action.map((listObj, index) => {
         return (
@@ -123,10 +127,10 @@ function SingleClientPanel() {
                 <td>{index + 1}</td>
                 <td>{listObj.contents}</td>
                 <td>{listObj.actionType}</td>
-                <td>{listObj.date}</td>
-                <td><Button variant="danger" onClick={()=>deleteAction(listObj._id)}>Delete Action</Button></td>
+                <td>{format(new Date(listObj.date), 'isoDate')}</td>
+                <td><Button variant="warning" onClick={() => { setEditActionData(listObj); setEditActionPanelModal(true) }}>Edit Action</Button></td>
+                <td><Button variant="danger" onClick={() => deleteAction(listObj._id)}>Delete Action</Button></td>
             </tr>
-
         )
     })
 
@@ -135,7 +139,7 @@ function SingleClientPanel() {
         getClient()
     }, [])
 
-    // console.log(client.data)
+
 
     return (
         <div>
@@ -241,7 +245,8 @@ function SingleClientPanel() {
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>}
-            {actionPanelModal && <AddActionPanel clientData={client.data} setActionPanelModal={setActionPanelModal} actionPanelModal={actionPanelModal} getClient={getClient}/>}
+            {actionPanelModal && <AddActionPanel clientData={client.data} setActionPanelModal={setActionPanelModal} actionPanelModal={actionPanelModal} getClient={getClient} />}
+            {actionEditPanelModal && <EditActionPanel clientData={client.data} editActionData={editActionData} setEditActionPanelModal={setEditActionPanelModal} actionEditPanelModal={actionEditPanelModal} getClient={getClient} />}
         </div>
     )
 }

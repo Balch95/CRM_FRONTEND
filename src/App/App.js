@@ -9,43 +9,17 @@ import 'bootstrap/dist/css/bootstrap.css'
 import BasicPanel from './BasicPanel/BasicPanel';
 import AddClienPanel from './AddClientPanel/AddClientPanel';
 import SingleClientPanel from './SingleClientPanel/SingleClientPanel';
+import LoginModal from './LoginModal/LoginModal';
 
 function App() {
 
-  const [clientList, setClientList] = useState([]);
-
-  const clientDown = (e) => {
-
-    axios
-      .get("http://localhost:5050/api/client/all")
-      .then((res) => {
-        setClientList(res.data);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  const clientDelete = (e, id) => {
-
-    axios
-      .delete(`http://localhost:5050/api/client/remove/${id}`)
-      .then(() => {
-        clientDown()
-      })
-  }
-
-  useEffect(() => {
-    clientDown();
-  }, [])
-
-  console.log(clientList);
-
+  const[user, setUser] = useState(JSON.parse(localStorage.getItem('jwt_user')))
+  console.log(user)
 
   return (
     <Container>
-      <Navbar bg="primary" variant="dark">
+      {!user && <LoginModal/>}
+      {user && <Navbar bg="primary" variant="dark">
         <Container>
           <Navbar.Brand>CRMApp</Navbar.Brand>
           <Nav className="me-auto">
@@ -53,13 +27,13 @@ function App() {
             <Nav.Link href="/AddClientPanel">Add Client</Nav.Link>
           </Nav>
         </Container>
-      </Navbar>
+      </Navbar>}
 
-      <Routes>
-        <Route path="/" element={<BasicPanel clientList={clientList} clientDelete={clientDelete} />} />
-        <Route path="/AddClientPanel" element={<AddClienPanel clientDown={clientDown} />} />
+      {user &&<Routes>
+        <Route path="/" element={<BasicPanel/>} />
+        <Route path="/AddClientPanel" element={<AddClienPanel/>} />
         <Route path="/SingleClient/:id" element={<SingleClientPanel />} />
-      </Routes>
+      </Routes>}
 
 
     </Container>
