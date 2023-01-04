@@ -145,7 +145,7 @@ function SingleClientPanel() {
         <div>
             <h2>Client Panel</h2>
             {client && <h3><b>Client: {client.data.companyName}</b></h3>}
-            {client && <Container className="main-panel">
+            {client && <Container>
                 <Row>
                     <Col>
                         <Alert>
@@ -161,19 +161,21 @@ function SingleClientPanel() {
                 </Row>
                 <Button variant="warning" onClick={() => setEditDataClientModal(true)}>Edit Client</Button>
                 <Row>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Content</th>
-                                <th>Action</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {actionLiElement}
-                        </tbody>
-                    </Table>
+                    <Col>
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Content</th>
+                                    <th>Action</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {actionLiElement}
+                            </tbody>
+                        </Table>
+                    </Col>
                 </Row>
                 <Button variant="success" onClick={() => setActionPanelModal(true)}>Add action</Button>
             </Container>}

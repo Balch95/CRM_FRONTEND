@@ -36,7 +36,8 @@ function LoginModal(props) {
                }
                if(res.status === 200){
                 localStorage.setItem('jwt_user', JSON.stringify(res.data.jwt))
-                console.log(cookies)
+                localStorage.setItem('userPermison', JSON.stringify(res.data.userPermision))
+                console.log(res)
                 setError("");
                 cookiesSet(res.data.jwt);
                 props.autoLogout()

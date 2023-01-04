@@ -16,27 +16,32 @@ import Singup from './Singup/Singup';
 function App() {
 
   const [cookie, setCookie, removeCookie] = useCookies();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('jwt_user')))
 
+  console.log(user)
+  axios.defaults.headers.common['x-auth-token'] = user;
 
-  const logout = () =>{
+  const logout = () => {
     removeCookie("TokenTime")
+    localStorage.clear()
   }
 
-  const autoLogout = () =>{
-    if(cookie.TokenTime){
-      setTimeout(()=>{
+  const autoLogout = () => {
+    if (!cookie.TokenTime) {
+      setTimeout(() => {
         window.location.reload();
-      },600001)
+        localStorage.clear()
+      }, 600001)
     }
   }
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     autoLogout()
   })
-  
+
   return (
     <Container>
-      {!cookie.TokenTime && <LoginModal autoLogout={autoLogout}/>}
+      {!cookie.TokenTime && <LoginModal autoLogout={autoLogout} />}
       {cookie.TokenTime && <Navbar bg="primary" variant="dark">
         <Container>
           <Navbar.Brand>CRMApp</Navbar.Brand>
@@ -44,16 +49,16 @@ function App() {
             <Nav.Link href="/"><Button variant="success">Home</Button></Nav.Link>
             <Nav.Link href="/AddClientPanel"><Button variant="success">Add client</Button></Nav.Link>
             <Nav.Link href="/Singup"><Button variant="warning">Add user</Button></Nav.Link>
-            <Nav.Link onClick={()=>{logout()}}><Button variant="secondary">Logout</Button></Nav.Link>
+            <Nav.Link onClick={() => { logout() }}><Button variant="secondary">Logout</Button></Nav.Link>
           </Nav>
         </Container>
       </Navbar>}
 
-      {cookie.TokenTime &&<Routes>
-        <Route path="/" element={<BasicPanel/>} />
-        <Route path="/AddClientPanel" element={<AddClienPanel/>} />
+      {cookie.TokenTime && <Routes>
+        <Route path="/" element={<BasicPanel />} />
+        <Route path="/AddClientPanel" element={<AddClienPanel />} />
         <Route path="/SingleClient/:id" element={<SingleClientPanel />} />
-        <Route path="/Singup" element={<Singup/>}/>
+        <Route path="/Singup" element={<Singup />} />
       </Routes>}
 
 

@@ -45,8 +45,14 @@ function AddClienPanel(props) {
             'http://localhost:5050/api/client/add',
             companyDataObj,
         ).then((res) => {
-            console.log(res);
-            navigate("/")
+            if(res.status === 200){
+                console.log(res);
+                navigate("/")
+            }
+            if(res.status === 201){
+                console.log(res)
+            }
+            
         }).catch((res, err) => {
             console.log(res, err);
         })
