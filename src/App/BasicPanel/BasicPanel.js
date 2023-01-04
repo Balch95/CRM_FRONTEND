@@ -48,8 +48,8 @@ function BasicPanel(props) {
 
     let liElements = clientList.map((listObj) => {
         return (
-            <Container key={listObj._id}>
-                <Accordion defaultActiveKey="0">
+          
+                <Accordion defaultActiveKey="0" className="test">
                     <Accordion.Item eventKey="1">
                         <Accordion.Header>{listObj.companyName}</Accordion.Header>
                         <Accordion.Body>
@@ -79,7 +79,7 @@ function BasicPanel(props) {
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
-            </Container>
+         
         );
     });
 

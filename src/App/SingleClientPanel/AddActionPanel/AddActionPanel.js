@@ -5,24 +5,17 @@ import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios";
 
 function AddActionPanel(props) {
-
-    console.log(props.clientData)
+    const [actionData, setActionData] = useState({
+        content: "",
+        actionType: "",
+        date:""
+    })
     
-    const [content, setContent] = useState();
-    const [actionType, setActionType] = useState();
-    const [date, setDate] = useState();
-
     const sendActionData = (e) =>{
-        let setActionData ={
-            contents: content,
-            actionType: actionType,
-            date: date,
-        }
 
-        console.log(setActionData)
         axios.post(
             `http://localhost:5050/api/action/add/${props.clientData._id}`,
-            setActionData,
+         actionData,
         ).then((res) => {
             console.log(res)
             props.getClient()
@@ -34,19 +27,8 @@ function AddActionPanel(props) {
         props.setActionPanelModal(false)
     }
 
-    const setActionData = (e) => {
-
-        const { id, value } = e.target;
-
-        if (id === 'contents') {
-            setContent(value)
-        }
-        if (id === 'actionType') {
-            setActionType(value)
-        }
-        if (id === 'date') {
-            setDate(value)
-        }
+    const setActionState = (e) => {
+        setActionData({...actionData, [e.target.id]: e.target.value})
     }
 
 
@@ -67,11 +49,11 @@ function AddActionPanel(props) {
                                 <Col>
                                     <Form.Group>
                                         <Form.Label>Action content:</Form.Label>
-                                        <Form.Control type="text" id="contents" onChange={(e)=>setActionData(e)}/>
+                                        <Form.Control type="text" id="contents" onChange={(e)=> setActionState(e)}/>
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label>Action type:</Form.Label>
-                                        <Form.Select aria-label="Action type" id="actionType" onChange={(e)=>setActionData(e)}>
+                                        <Form.Select aria-label="Action type" id="actionType" onChange={(e)=> setActionState(e)}>
                                             <option>Open this select menu</option>
                                             <option value="Email">Email</option>
                                             <option value="Phone">Phone</option>
@@ -80,7 +62,7 @@ function AddActionPanel(props) {
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label>Date:</Form.Label>
-                                        <Form.Control type="date" id="date" onChange={(e)=>setActionData(e)}/>
+                                        <Form.Control type="date" id="date" onChange={(e)=> setActionState(e)}/>
                                     </Form.Group>
                                 </Col>
                             </Row>

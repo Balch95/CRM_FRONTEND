@@ -1,37 +1,34 @@
 import React, { useState } from "react";
-import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bootstrap";
+import { Button,  Modal, Form } from "react-bootstrap";
+import { useCookies } from 'react-cookie';
 
+import './LoginModal.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios";
 
 function LoginModal(props) {
 
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
+    const [loginValue, setLoginValue] = useState({
+        username: "",
+        password: ""
+    })
+    const [cookies, setCookie] = useCookies(['jwt_user'])
     const [error, setError] = useState();
 
-    console.log(props.user)
 
-    const setData = (e) => {
-        const { id, value } = e.target;
-
-        if (id === 'username') {
-            setUsername(value)
-        }
-        if (id === 'password') {
-            setPassword(value)
-        }
+    const cookiesSet = (jwt) => {
+        setCookie('TokenTime', jwt, {path: '/', maxAge: 600})
     }
 
-    const sendLogin = () => {
-        let loginData = {
-            username: username,
-            password: password
-        }
-        console.log(loginData)
+    const setData = (e) => {
+        setLoginValue({...loginValue, [e.target.id]: e.target.value})
+    }
+
+    const sendLogin = (e) => {
+        e.preventDefault()
         axios.post(
             'http://localhost:5050/api/user/login',
-            loginData
+            loginValue
             ).then((res)=>{
                if(res.status === 201){
                 setError(res.data.message)
@@ -39,8 +36,10 @@ function LoginModal(props) {
                }
                if(res.status === 200){
                 localStorage.setItem('jwt_user', JSON.stringify(res.data.jwt))
-                console.log(res.data)
-                setError("")
+                console.log(cookies)
+                setError("");
+                cookiesSet(res.data.jwt);
+                props.autoLogout()
                }
             }).catch((res,err)=>{
                 console.log(res)

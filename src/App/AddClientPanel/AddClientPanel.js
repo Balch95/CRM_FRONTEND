@@ -12,50 +12,32 @@ import { useNavigate } from "react-router-dom";
 
 function AddClienPanel(props) {
 
-    const [companyName, setCompanyName] = useState();
-    const [street, setStreet] = useState();
-    const [zipCode, setZipCode] = useState();
-    const [number, setNumber] = useState();
-    const [city, setCity] = useState();
-    const [nip, setNip] = useState();
+    const [companyData, setCompayData] = useState({
+        companyName: "",
+        street: "",
+        zipCode: "",
+        number: "",
+        city: "",
+        nip: ""
+    })
     const navigate = useNavigate();
 
-    const setCompayData = (e) => {
-
-        const { id, value } = e.target;
-
-        if (id === 'companyName') {
-            setCompanyName(value)
-        }
-        if (id === 'street') {
-            setStreet(value)
-        }
-        if (id === 'number') {
-            setNumber(value)
-        }
-        if (id === 'zipCode') {
-            setZipCode(value)
-        }
-        if (id === 'city') {
-            setCity(value)
-        }
-        if (id === 'nip') {
-            setNip(value)
-        }
+    const setCompayState = (e) => {
+        setCompayData({...companyData, [e.target.id]: e.target.value})
     }
 
 
     const addNewCompany = (e) => {
         e.preventDefault()
         let companyDataObj = {
-            companyName: companyName,
+            companyName: companyData.companyName,
             address: {
-                city: city,
-                number: number,
-                street: street,
-                zipCode: zipCode,
+                city: companyData.city,
+                number: companyData.number,
+                street: companyData.street,
+                zipCode: companyData.zipCode,
             },
-            nip: nip,
+            nip: companyData.nip,
             action: []
         }
 
@@ -87,7 +69,7 @@ function AddClienPanel(props) {
                             <Col>
                                 <Form.Group>
                                     <Form.Label><h5>Companny Name:</h5></Form.Label>
-                                    <Form.Control type="text" id="companyName" onChange={(e) => setCompayData(e)} />
+                                    <Form.Control type="text" id="companyName" onChange={(e) => setCompayState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -98,21 +80,21 @@ function AddClienPanel(props) {
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Street:</Form.Label>
-                                    <Form.Control type="text" id="street" onChange={(e) => setCompayData(e)} />
+                                    <Form.Control type="text" id="street" onChange={(e) => setCompayState(e)} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Number:</Form.Label>
-                                    <Form.Control type="text" id="number" onChange={(e) => setCompayData(e)} />
+                                    <Form.Control type="text" id="number" onChange={(e) => setCompayState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>ZIP:</Form.Label>
-                                    <Form.Control type="text" id="zipCode" onChange={(e) => setCompayData(e)} />
+                                    <Form.Control type="text" id="zipCode" onChange={(e) => setCompayState(e)} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>City:</Form.Label>
-                                    <Form.Control type="text" id="city" onChange={(e) => setCompayData(e)} />
+                                    <Form.Control type="text" id="city" onChange={(e) => setCompayState(e)} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -122,7 +104,7 @@ function AddClienPanel(props) {
                             <Col>
                                 <Form.Group>
                                     <h5>NIP-code:</h5>
-                                    <Form.Control type="number" id="nip" onChange={(e) => setCompayData(e)} />
+                                    <Form.Control type="number" id="nip" onChange={(e) => setCompayState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>

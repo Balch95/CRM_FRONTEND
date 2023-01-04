@@ -5,7 +5,7 @@ import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bo
 import { format } from "fecha";
 
 
-
+import './SingleClientPanel.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import AddActionPanel from "./AddActionPanel/AddActionPanel";
 import EditActionPanel from "./EditActionPanel/EditActionPanel";
@@ -119,7 +119,7 @@ function SingleClientPanel() {
         })
     }
 
-    
+
 
     let actionLiElement = action.map((listObj, index) => {
         return (
@@ -145,7 +145,7 @@ function SingleClientPanel() {
         <div>
             <h2>Client Panel</h2>
             {client && <h3><b>Client: {client.data.companyName}</b></h3>}
-            {client && <Container>
+            {client && <Container className="main-panel">
                 <Row>
                     <Col>
                         <Alert>
@@ -250,5 +250,4 @@ function SingleClientPanel() {
         </div>
     )
 }
-
 export default SingleClientPanel

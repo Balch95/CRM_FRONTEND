@@ -1,0 +1,13 @@
+table{
+    background-color: white;
+}
+button{
+    margin: 10px;
+}
+.main-panel{
+    background-color: azure;
+    padding: 10px;
+}
+.row{
+    padding: 10px;
+}
