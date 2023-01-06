@@ -29,17 +29,20 @@ function Singup() {
     const [password, setPassword] = useState();
     const [email, setEmail] = useState();
     const [phone, setPhone] = useState();
-    const [permission, setPermission] = useState([]);
+    const [permission, setPermission] = useState();
     const [error, setError] = useState();
 
     const permissonOption = [
         {
+            value: "user",
             label: "User"
         },
         {
+            value: "manager",
             label: "Manager"
         },
         {
+            value: "admin",
             label: "Admin"
         }
     ]
@@ -59,26 +62,11 @@ function Singup() {
             setPhone(value)
         }
         if (id === "permission") {
-            setPermission(value)
+            setPermission.push(value)
         }
     }
 
-    const setPermissionData = (e) =>{
-        setPermission(e)
-    }
 
-    const singupNewUser = (e) =>{
-        e.preventDefault()
-        let userObj ={
-            username: username,
-            password: password,
-            email: email,
-            phone: phone,
-            permission: permission.map((permission)=>{return permission.label})
-        }
-
-        console.log(userObj);
-    }
 
     return (
         <div>
@@ -86,35 +74,47 @@ function Singup() {
                 <Alert variant="primary">
                     <h4>Add new user</h4>
                     <h5 className="error">{error}</h5>
-                    <Form onSubmit={(e)=>singupNewUser(e)}>
+                    <Form onSubmit={console.log("send")}>
                         <Row>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Username:</Form.Label>
-                                    <Form.Control type="text" id="username" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="text" id="username" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Password:</Form.Label>
-                                    <Form.Control type="password" id="password" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="password" id="password" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Confirm password:</Form.Label>
-                                    <Form.Control type="password" id="confirmpassword" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="password" id="confirmpassword" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Email:</Form.Label>
-                                    <Form.Control type="email" id="email" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="email" id="email" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Phone:</Form.Label>
-                                    <Form.Control type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="Format: 123-456-789" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="Format: 123-456-789" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Permission:</Form.Label>
-                                   <MultiSelect options={permissonOption} value={permission} onChange={(e)=>setPermissionData(e)}/>
+                                   <MultiSelect options={permissonOption} labelledBy="Select" onChange={(e) => console.log(e)}/>
                                 </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                            </Col>
+                            <Col>
+                                <Form.Group>
+                                    <h5>NIP-code:</h5>
+                                    <Form.Control type="number" id="nip" onChange={(e) => setUserState(e)} />
+                                </Form.Group>
+                            </Col>
+                            <Col>
                             </Col>
                         </Row>
                         <Button variant="dark" type="submit" className="mx-auto">Add Client</Button>

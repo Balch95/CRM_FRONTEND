@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import { Cookies, useCookies } from 'react-cookie';
-
+import Countdown from 'react-countdown';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -16,9 +16,8 @@ import Singup from './Singup/Singup';
 function App() {
 
   const [cookie, setCookie, removeCookie] = useCookies();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('jwt_user')))
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('jwt_user')));
 
-  console.log(user)
   axios.defaults.headers.common['x-auth-token'] = user;
 
   const logout = () => {
@@ -27,17 +26,14 @@ function App() {
   }
 
   const autoLogout = () => {
-    if (!cookie.TokenTime) {
-      setTimeout(() => {
-        window.location.reload();
-        localStorage.clear()
-      }, 600001)
-    }
+    console.log("Auto logout is on")
+    setTimeout(() => {
+      logout();
+    }, 600000)
   }
 
-  useEffect(() => {
-    autoLogout()
-  })
+
+
 
   return (
     <Container>
@@ -47,16 +43,16 @@ function App() {
           <Navbar.Brand>CRMApp</Navbar.Brand>
           <Nav>
             <Nav.Link href="/"><Button variant="success">Home</Button></Nav.Link>
-            <Nav.Link href="/AddClientPanel"><Button variant="success">Add client</Button></Nav.Link>
-            <Nav.Link href="/Singup"><Button variant="warning">Add user</Button></Nav.Link>
-            <Nav.Link onClick={() => { logout() }}><Button variant="secondary">Logout</Button></Nav.Link>
+            {JSON.parse(localStorage.getItem("userPermission")).includes("admin", "manager") && <Nav.Link href="/AddClientPanel"><Button variant="success">Add client</Button></Nav.Link>}
+            {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Nav.Link href="/Singup"><Button variant="warning">Add user</Button></Nav.Link>}
+            <Nav.Link onClick={() => logout()}><Button variant="secondary">Logout</Button></Nav.Link>
           </Nav>
         </Container>
       </Navbar>}
 
       {cookie.TokenTime && <Routes>
         <Route path="/" element={<BasicPanel />} />
-        <Route path="/AddClientPanel" element={<AddClienPanel />} />
+       {JSON.parse(localStorage.getItem("userPermission")).includes("admin", "manager") && <Route path="/AddClientPanel" element={<AddClienPanel />} />}
         <Route path="/SingleClient/:id" element={<SingleClientPanel />} />
         <Route path="/Singup" element={<Singup />} />
       </Routes>}

@@ -9,9 +9,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './BasicPanel.css'
 
 
-function BasicPanel(props) {
+function BasicPanel() {
 
     const [clientList, setClientList] = useState([]);
+
 
     const clientDown = (e) => {
 
@@ -74,7 +75,7 @@ function BasicPanel(props) {
                                     </tr>
                                 </tbody>
                             </Table>
-                            <Button variant="danger" onClick={(e) => { clientDelete(e, listObj._id) }}>Delete Client</Button>
+                           {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Button variant="danger" onClick={(e) => { clientDelete(e, listObj._id) }}>Delete Client</Button>}
                             <Button variant="success" onClick={(e) => { SingleClientButton(e, listObj._id) }}>Client Action</Button>
                         </Accordion.Body>
                     </Accordion.Item>

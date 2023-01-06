@@ -129,12 +129,12 @@ function SingleClientPanel() {
                 <td>{listObj.actionType}</td>
                 <td>{format(new Date(listObj.date), 'isoDate')}</td>
                 <td><Button variant="warning" onClick={() => { setEditActionData(listObj); setEditActionPanelModal(true) }}>Edit Action</Button></td>
-                <td><Button variant="danger" onClick={() => deleteAction(listObj._id)}>Delete Action</Button></td>
+                {JSON.parse(localStorage.getItem("userPermission")).includes("admin", "manager") && <td><Button variant="danger" onClick={() => deleteAction(listObj._id)}>Delete Action</Button></td>}
             </tr>
         )
     })
 
-
+c
     useEffect(() => {
         getClient()
     }, [])
@@ -159,7 +159,7 @@ function SingleClientPanel() {
                         </Alert>
                     </Col>
                 </Row>
-                <Button variant="warning" onClick={() => setEditDataClientModal(true)}>Edit Client</Button>
+                {JSON.parse(localStorage.getItem("userPermission")).includes("admin", "manager") &&<Button variant="warning" onClick={() => setEditDataClientModal(true)}>Edit Client</Button>}
                 <Row>
                     <Col>
                         <Table striped bordered hover>

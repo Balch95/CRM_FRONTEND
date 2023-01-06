@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import { CookiesProvider } from "react-cookie";
 import { BrowserRouter } from 'react-router-dom';
 
-
 import 'bootstrap/dist/css/bootstrap.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

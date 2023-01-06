@@ -21,6 +21,7 @@ function AddClienPanel(props) {
         nip: ""
     })
     const navigate = useNavigate();
+    const [error, setError] = useState("")
 
     const setCompayState = (e) => {
         setCompayData({...companyData, [e.target.id]: e.target.value})
@@ -50,7 +51,8 @@ function AddClienPanel(props) {
                 navigate("/")
             }
             if(res.status === 201){
-                console.log(res)
+                setError(res.data.message)
+                console.log(res.data.message)
             }
             
         }).catch((res, err) => {
@@ -68,6 +70,7 @@ function AddClienPanel(props) {
             <Container>
                 <Alert variant="primary">
                     <h4>AddClient</h4>
+                    <h5 className="error">{error}</h5>
                     <Form onSubmit={(e)=>{addNewCompany(e)}}>
                         <Row>
                             <Col>
