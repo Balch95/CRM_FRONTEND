@@ -40,7 +40,7 @@ function LoginModal(props) {
                 console.log(res)
                 setError("");
                 cookiesSet(res.data.jwt);
-                props.autoLogout()
+                window.location.reload()
                }
             }).catch((res,err)=>{
                 console.log(res)

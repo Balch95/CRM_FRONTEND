@@ -32,15 +32,20 @@ function Singup() {
     const [permission, setPermission] = useState([]);
     const [error, setError] = useState();
 
+    const navigate = useNavigate();
+
     const permissonOption = [
         {
-            label: "User"
+            label: "User",
+            value: "user"
         },
         {
-            label: "Manager"
+            label: "Manager",
+            value: "manager"
         },
         {
-            label: "Admin"
+            label: "Admin",
+            value: "admin"
         }
     ]
 
@@ -74,8 +79,26 @@ function Singup() {
             password: password,
             email: email,
             phone: phone,
-            permission: permission.map((permission)=>{return permission.label})
+            permission: permission.map((permission)=>{return permission.value})
         }
+
+        axios.post(
+            'http://localhost:5050/api/user/singup',
+            userObj,
+        ).then((res) => {
+            if(res.status === 200){
+                console.log(res);
+                navigate("/UserList")
+            }
+            if(res.status === 201){
+                setError(res.data.message)
+                console.log(res.data.message)
+            }
+            
+        }).catch((res, err) => {
+            console.log(res, err);
+        })
+
 
         console.log(userObj);
     }
@@ -91,33 +114,33 @@ function Singup() {
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Username:</Form.Label>
-                                    <Form.Control type="text" id="username" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="text" id="username" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Password:</Form.Label>
-                                    <Form.Control type="password" id="password" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="password" id="password" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Confirm password:</Form.Label>
-                                    <Form.Control type="password" id="confirmpassword" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="password" id="confirmpassword" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Email:</Form.Label>
-                                    <Form.Control type="email" id="email" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="email" id="email" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Phone:</Form.Label>
-                                    <Form.Control type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="Format: 123-456-789" onChange={(e) => setUserState(e)} />
+                                    <Form.Control type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" placeholder="Format: 123-456-789" onChange={(e) => setUserState(e)} required/>
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Permission:</Form.Label>
-                                   <MultiSelect options={permissonOption} value={permission} onChange={(e)=>setPermissionData(e)}/>
+                                   <MultiSelect options={permissonOption} value={permission} onChange={(e)=>setPermissionData(e)} required/>
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Button variant="dark" type="submit" className="mx-auto">Add Client</Button>
+                        <Button variant="dark" type="submit" className="mx-auto">Create new user</Button>
                     </Form>
                 </Alert>
             </Container>

@@ -9,10 +9,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './BasicPanel.css'
 
 
-function BasicPanel() {
+function BasicPanel(props) {
 
     const [clientList, setClientList] = useState([]);
 
+    console.log(clientList)
+
+    
 
     const clientDown = (e) => {
 
@@ -47,42 +50,49 @@ function BasicPanel() {
         navigate(`SingleClient/${id}`)
     }
 
-    let liElements = clientList.map((listObj) => {
-        return (
-          
-                <Accordion defaultActiveKey="0" className="test">
-                    <Accordion.Item eventKey="1">
-                        <Accordion.Header>{listObj.companyName}</Accordion.Header>
-                        <Accordion.Body>
-                            <Table striped bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th>NIP</th>
-                                        <th>Address</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{listObj.nip}</td>
-                                        <td>
-                                            <ul>
-                                                <li>Street: {listObj.address.street}</li>
-                                                <li>Number: {listObj.address.number}</li>
-                                                <li>ZIP: {listObj.address.zipCode}</li>
-                                                <li>City: {listObj.address.city}</li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </Table>
-                           {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Button variant="danger" onClick={(e) => { clientDelete(e, listObj._id) }}>Delete Client</Button>}
-                            <Button variant="success" onClick={(e) => { SingleClientButton(e, listObj._id) }}>Client Action</Button>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
-         
-        );
-    });
+    let liElements = [];
+
+    if(!clientList.message){
+        liElements = clientList.map((listObj) => {
+            return (
+              
+                    <Accordion key={listObj._id} defaultActiveKey="0" className="test">
+                        <Accordion.Item eventKey="1">
+                            <Accordion.Header>{listObj.companyName}</Accordion.Header>
+                            <Accordion.Body>
+                                <Table striped bordered hover>
+                                    <thead>
+                                        <tr>
+                                            <th>NIP</th>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{listObj.nip}</td>
+                                            <td>
+                                                <ul>
+                                                    <li>Street: {listObj.address.street}</li>
+                                                    <li>Number: {listObj.address.number}</li>
+                                                    <li>ZIP: {listObj.address.zipCode}</li>
+                                                    <li>City: {listObj.address.city}</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+                               {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Button variant="danger" onClick={(e) => { clientDelete(e, listObj._id) }}>Delete Client</Button>}
+                                <Button variant="success" onClick={(e) => { SingleClientButton(e, listObj._id) }}>Client Action</Button>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+             
+            );
+        });
+    }else if(clientList.message){
+        liElements = clientList.message
+    }
+    
 
     return (
         <div>
