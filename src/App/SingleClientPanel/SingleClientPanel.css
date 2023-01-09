@@ -11,3 +11,10 @@ button{
 .row{
     padding: 10px;
 }
+.error{
+    font-weight: 500;
+    font-size: larger;
+    display: block;
+    text-align: center;
+    color: red;
+}

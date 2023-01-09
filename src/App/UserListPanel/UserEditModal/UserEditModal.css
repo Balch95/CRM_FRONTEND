@@ -1,0 +1,14 @@
+.username{
+    display: block;
+    font-weight: 500;
+    font-size: larger;
+    text-align: center;
+}
+
+.error{
+    font-weight: 500;
+    font-size: larger;
+    display: block;
+    text-align: center;
+    color: red;
+}

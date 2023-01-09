@@ -18,6 +18,8 @@ function SingleClientPanel() {
     const [actionPanelModal, setActionPanelModal] = useState(false)
     const [actionEditPanelModal, setEditActionPanelModal] = useState(false)
 
+    const [error, setError] = useState()
+
     const [editActionData, setEditActionData] = useState([])
 
     const [companyName, setCompanyName] = useState();
@@ -25,31 +27,60 @@ function SingleClientPanel() {
     const [zipCode, setZipCode] = useState();
     const [number, setNumber] = useState();
     const [city, setCity] = useState();
+    const [phone, setPhone] = useState();
+    const [email, setEmail] = useState();
     const [nip, setNip] = useState();
     const [action, setAction] = useState([]);
 
 
     const setCompayData = (e) => {
-
-        const { id, value } = e.target;
-
-        if (id === 'companyName') {
+        const { id, value } = e.target
+        console.log(id)
+        if (id === "companyName") {
             setCompanyName(value)
         }
-        if (id === 'street') {
-            setStreet(value)
-        }
-        if (id === 'number') {
-            setNumber(value)
-        }
-        if (id === 'zipCode') {
-            setZipCode(value)
-        }
-        if (id === 'city') {
+        if (id === "city") {
             setCity(value)
         }
-        if (id === 'nip') {
-            setNip(value)
+        if (id === "number") {
+            setNumber(value)
+        }
+        if (id === "street") {
+            setStreet(value)
+        }
+        if (id === "zipCode") {
+            if (/[0-9]{2}[-][0-9]{3}/.test(value)) {
+                setZipCode(value)
+                setError()
+            } else {
+                setError("Incorrect zip code")
+            }
+        }
+        if (id === "phone") {
+            if (/^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{3})$/.test(value)) {
+                setPhone(value)
+                setError()
+            } else {
+                setError("Incorrect phone number format")
+            }
+        }
+        if (id === "email") {
+            if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+                setEmail(value)
+                setError()
+            } else {
+                setError("Incorrect email address format!")
+            }
+        }
+        if (id === "nip") {
+            if (value.length < 10) {
+                setError("NIP code too short")
+            } else if (value.length > 10) {
+                setError("NIP code too long")
+            } else {
+                setNip(value)
+                setError()
+            }
         }
     }
 
@@ -63,6 +94,8 @@ function SingleClientPanel() {
                 street: street,
                 zipCode: zipCode
             },
+            phone: phone,
+            email: email,
             nip: nip
         }
 
@@ -97,6 +130,8 @@ function SingleClientPanel() {
                 setZipCode(res.data.address.zipCode)
                 setCity(res.data.address.city)
                 setNip(res.data.nip)
+                setPhone(res.data.phone)
+                setEmail(res.data.email)
                 setAction(res.data.action)
                 console.log(res)
             })
@@ -142,8 +177,9 @@ function SingleClientPanel() {
 
 
     return (
-        <div>
+        <Container>
             <h2>Client Panel</h2>
+            
             {client && <h3><b>Client: {client.data.companyName}</b></h3>}
             {client && <Container>
                 <Row>
@@ -154,12 +190,14 @@ function SingleClientPanel() {
                                 <li>Number: {client.data.address.number}</li>
                                 <li>ZIP: {client.data.address.zipCode}</li>
                                 <li>City: {client.data.address.city}</li>
+                                <li>Phone: {client.data.phone}</li>
+                                <li>Email: {client.data.email}</li>
                                 <li>NIP:{client.data.nip}</li>
                             </ul>
                         </Alert>
                     </Col>
                 </Row>
-                {JSON.parse(localStorage.getItem("userPermission")).includes("admin", "manager") &&<Button variant="warning" onClick={() => setEditDataClientModal(true)}>Edit Client</Button>}
+                {JSON.parse(localStorage.getItem("userPermission")).includes("admin", "manager") && <Button variant="warning" onClick={() => setEditDataClientModal(true)}>Edit Client</Button>}
                 <Row>
                     <Col>
                         <Table striped bordered hover>
@@ -185,9 +223,9 @@ function SingleClientPanel() {
                     <Modal.Header>
                         <Modal.Title>Edit Client</Modal.Title>
                     </Modal.Header>
-
                     <Modal.Body>
                         <Alert>
+                        <span className="error">{error}</span>
                             <Form>
                                 <Row>
                                     <Col>
@@ -226,6 +264,18 @@ function SingleClientPanel() {
                                 </Row>
                                 <Row>
                                     <Col>
+                                        <Form.Group>
+                                            <Form.Label>Phone:</Form.Label>
+                                            <Form.Control type="text" id="phone" defaultValue={client.data.phone} onChange={(e) => setCompayData(e)} />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Email:</Form.Label>
+                                            <Form.Control type="email" id="email" defaultValue={client.data.email} onChange={(e) => setCompayData(e)} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
                                     </Col>
                                     <Col>
                                         <Form.Group>
@@ -249,7 +299,7 @@ function SingleClientPanel() {
             </div>}
             {actionPanelModal && <AddActionPanel clientData={client.data} setActionPanelModal={setActionPanelModal} actionPanelModal={actionPanelModal} getClient={getClient} />}
             {actionEditPanelModal && <EditActionPanel clientData={client.data} editActionData={editActionData} setEditActionPanelModal={setEditActionPanelModal} actionEditPanelModal={actionEditPanelModal} getClient={getClient} />}
-        </div>
+        </Container>
     )
 }
 export default SingleClientPanel

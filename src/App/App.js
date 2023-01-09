@@ -36,7 +36,7 @@ function App() {
           <Nav>
             <Nav.Link href="/"><Button variant="success">Home</Button></Nav.Link>
             {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <Nav.Link href="/AddClientPanel"><Button variant="success">Add client</Button></Nav.Link>}
-            {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <Nav.Link href="/UserList"><Button variant="success">User List</Button></Nav.Link>}
+            {<Nav.Link href="/UserList"><Button variant="success">User List</Button></Nav.Link>}
             {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Nav.Link href="/Singup"><Button variant="warning">Add user</Button></Nav.Link>}
             <Nav.Link onClick={() => logout()}><Button variant="secondary">Logout</Button></Nav.Link>
           </Nav>
@@ -45,10 +45,10 @@ function App() {
 
       {cookie.TokenTime && <Routes>
         <Route path="/" element={<BasicPanel/>} />
-        {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <Route path="/AddClientPanel" element={<AddClienPanel />} />}
+        {<Route path="/AddClientPanel" element={<AddClienPanel />} />}
         <Route path="/SingleClient/:id" element={<SingleClientPanel />} />
         {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Route path="/Singup" element={<Singup />} />}
-        {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <Route path="/UserList" element={<UserListPanel />} />}
+        <Route path="/UserList" element={<UserListPanel />} />
       </Routes>}
 
 

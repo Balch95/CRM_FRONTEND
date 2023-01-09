@@ -76,6 +76,8 @@ function BasicPanel(props) {
                                                     <li>Number: {listObj.address.number}</li>
                                                     <li>ZIP: {listObj.address.zipCode}</li>
                                                     <li>City: {listObj.address.city}</li>
+                                                    <li>Phone: {listObj.phone}</li>
+                                                    <li>Email: {listObj.email}</li>
                                                 </ul>
                                             </td>
                                         </tr>

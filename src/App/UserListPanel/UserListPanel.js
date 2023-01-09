@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bootstrap";
 
 import 'bootstrap/dist/css/bootstrap.css'
+import UserEditModal from "./UserEditModal/UserEditModal";
+
 
 function UserListPanel() {
 
     const [userList, setUserList] = useState();
-
+    const [userEditModal, setUserEditModal] = useState(false)
+    const [userEditData, setUserEditData] = useState()
 
     const userDown = (e) => {
 
@@ -22,6 +25,16 @@ function UserListPanel() {
             })
     }
 
+
+    const userRemove = (id) => {
+
+        axios
+            .delete(`http://localhost:5050/api/user/remove/${id}`)
+            .then(() => {
+                userDown()
+            })
+    }
+
     let liElements = []
 
     if(userList){
@@ -32,9 +45,9 @@ function UserListPanel() {
                     <td>{listObj.username}</td>
                     <td>{listObj.email}</td>
                     <td>{listObj.phone}</td>
-                    <td>{listObj.permission.map((data)=><li>{data}</li>)}</td>
-                    <td>{JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Button variant="warning">Edit User</Button>}</td>
-                    <td>{JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Button variant="danger">Delete User</Button>}</td>
+                    {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <td>{listObj.permission.map((data)=><li>{data}</li>)}</td>}
+                    {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <td><Button variant="warning" onClick={()=>{setUserEditData(listObj); setUserEditModal(true)}}>Edit User</Button></td>}
+                    {JSON.parse(localStorage.getItem("userPermission")).includes("admin") &&<td> <Button variant="danger" onClick={()=>{userRemove(listObj._id)}}>Delete User</Button></td>}
                 </tr>
             )
         });
@@ -45,7 +58,7 @@ function UserListPanel() {
         userDown()
     }, [])
 
-    console.log(userList)
+    console.log(userEditData)
 
     return (
         <Container>
@@ -59,7 +72,7 @@ function UserListPanel() {
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Permission</th>
+                                {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <th>Permission</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -68,6 +81,7 @@ function UserListPanel() {
                     </Table>
                 </Col>
             </Row>
+            {userEditModal && <UserEditModal userEditData={userEditData} userEditModal={userEditModal} setUserEditModal={setUserEditModal}/>}
         </Container>
     )
 }
