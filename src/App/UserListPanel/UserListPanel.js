@@ -5,6 +5,7 @@ import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bo
 import 'bootstrap/dist/css/bootstrap.css'
 import UserEditModal from "./UserEditModal/UserEditModal";
 
+const permission = require('../middlewares/testPermision')
 
 function UserListPanel() {
 
@@ -45,9 +46,9 @@ function UserListPanel() {
                     <td>{listObj.username}</td>
                     <td>{listObj.email}</td>
                     <td>{listObj.phone}</td>
-                    {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <td>{listObj.permission.map((data)=><li>{data}</li>)}</td>}
-                    {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <td><Button variant="warning" onClick={()=>{setUserEditData(listObj); setUserEditModal(true)}}>Edit User</Button></td>}
-                    {JSON.parse(localStorage.getItem("userPermission")).includes("admin") &&<td> <Button variant="danger" onClick={()=>{userRemove(listObj._id)}}>Delete User</Button></td>}
+                    {(permission.test('admin') || permission.test('manager')) && <td>{listObj.permission.map((data)=><li>{data}</li>)}</td>}
+                    {permission.test('admin') && <td><Button variant="warning" onClick={()=>{setUserEditData(listObj); setUserEditModal(true)}}>Edit User</Button></td>}
+                    {permission.test('admin') &&<td> <Button variant="danger" onClick={()=>{userRemove(listObj._id)}}>Delete User</Button></td>}
                 </tr>
             )
         });
@@ -56,9 +57,12 @@ function UserListPanel() {
 
     useEffect(() => {
         userDown()
+
     }, [])
 
     console.log(userEditData)
+
+    permission.test()
 
     return (
         <Container>
@@ -72,7 +76,7 @@ function UserListPanel() {
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                {(JSON.parse(localStorage.getItem("userPermission")).includes("admin") || JSON.parse(localStorage.getItem("userPermission")).includes("manager")) && <th>Permission</th>}
+                                {(permission.test('admin')||permission.test('manager')) && <th>Permission</th>}
                             </tr>
                         </thead>
                         <tbody>

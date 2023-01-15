@@ -14,6 +14,8 @@ import LoginModal from './LoginModal/LoginModal';
 import Singup from './Singup/Singup';
 import UserListPanel from './UserListPanel/UserListPanel';
 
+const permission = require('./middlewares/testPermision')
+
 function App() {
 
   const [cookie, setCookie, removeCookie] = useCookies();
