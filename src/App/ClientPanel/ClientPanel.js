@@ -1,24 +1,16 @@
 import React, {useState, useEffect} from "react";
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table'
-import { Container, Button, Row, Col, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 import 'bootstrap/dist/css/bootstrap.css'
-import './BasicPanel.css'
+import './ClientPanel.css'
+import { testPermission } from "../helpservices/testPermision";
 
-
-function BasicPanel(props) {
-
+function ClientPanel(props) {
     const [clientList, setClientList] = useState([]);
-
-    console.log(clientList)
-
-    
-
     const clientDown = (e) => {
-
         axios
             .get("http://localhost:5050/api/client/all")
             .then((res) => {
@@ -29,29 +21,21 @@ function BasicPanel(props) {
                 console.log(err)
             })
     }
-
     const clientDelete = (e, id) => {
-
         axios
             .delete(`http://localhost:5050/api/client/remove/${id}`)
             .then(() => {
                 clientDown()
             })
     }
-
     useEffect(() => {
         clientDown();
     }, [])
-
     const navigate = useNavigate()
-
-    const SingleClientButton = (e, id) => {
-        e.preventDefault(e)
+    const SingleClientButton = (id) => {
         navigate(`SingleClient/${id}`)
     }
-
     let liElements = [];
-
     if(!clientList.message){
         liElements = clientList.map((listObj) => {
             return (
@@ -83,19 +67,16 @@ function BasicPanel(props) {
                                         </tr>
                                     </tbody>
                                 </Table>
-                               {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Button variant="danger" onClick={(e) => { clientDelete(e, listObj._id) }}>Delete Client</Button>}
-                                <Button variant="success" onClick={(e) => { SingleClientButton(e, listObj._id) }}>Client Action</Button>
+                               {(testPermission("admin") || testPermission('manager')) && <Button variant="danger" onClick={(e) => { clientDelete(e, listObj._id) }}>Delete Client</Button>}
+                                <Button variant="success" onClick={() => { SingleClientButton(listObj._id) }}>Client Action</Button>
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
-             
             );
         });
     }else if(clientList.message){
         liElements = clientList.message
     }
-    
-
     return (
         <div>
             <h1>Client List</h1>
@@ -105,5 +86,4 @@ function BasicPanel(props) {
         </div>
     )
 }
-
-export default BasicPanel;
+export default ClientPanel;

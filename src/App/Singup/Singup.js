@@ -1,25 +1,26 @@
 import React, { useState } from "react";
 import { Container, Button, Form, Alert, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Multiselect from "react-widgets/cjs/Multiselect";
-
+import { MultiSelect } from "react-multi-select-component";
 import 'bootstrap/dist/css/bootstrap.css'
 import { useNavigate } from "react-router-dom";
-import "react-widgets/styles.css";
+
 
 function Singup() {
-
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [email, setEmail] = useState();
     const [phone, setPhone] = useState();
     const [permission, setPermission] = useState([]);
+    const [permissionLable, setPermissionLable] = useState([])
     const [error, setError] = useState();
-
     const navigate = useNavigate();
-
-    console.log(permission)
+    const options = [
+        { label: "User", value: "user" },
+        { label: "Manager", value: "manager" },
+        { label: "Admin", value: "admin"},
+      ]
 
     const setUserState = (e) => {
         const { id, value } = e.target;
@@ -81,13 +82,11 @@ function Singup() {
             }
         }
     }
-
     const setPermissionData = (e) => {
-        setPermission(e)
+        setPermission(e.map((opt)=>opt.value))
+        setPermissionLable(e)
     }
-
-    const singupNewUser = (e) => {
-        e.preventDefault()
+    const singupNewUser = () => {
         let userObj = {
             username: username,
             password: password,
@@ -95,6 +94,8 @@ function Singup() {
             phone: phone,
             permission: permission
         }
+        if(userObj.password && userObj.username && userObj.email && userObj.phone && userObj.permission){
+            setError()
         axios.post(
             'http://localhost:5050/api/user/singup',
             userObj,
@@ -111,18 +112,17 @@ function Singup() {
         }).catch((res, err) => {
             console.log(res, err);
         })
-
-
-        console.log(userObj);
+        } else {
+            setError('Please check the form')
+        }
     }
-
     return (
         <div>
             <Container>
                 <Alert variant="primary">
                     <h4>Add new user</h4>
                     <h5 className="error">{error}</h5>
-                    <Form onSubmit={(e) => singupNewUser(e)}>
+                    <Form onSubmit={() => singupNewUser()}>
                         <Row>
                             <Col>
                                 <Form.Group>
@@ -149,7 +149,7 @@ function Singup() {
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Permission:</Form.Label>
-                                    <Multiselect defaultValue={permission} data={["user", "manager", "admin"]} onChange={(e) => setPermissionData(e)} required />
+                                    <MultiSelect value={permissionLable} labelledBy="Select" options={options} onChange={(e)=>{setPermissionLable(e); setPermissionData(e)}} required />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -160,5 +160,4 @@ function Singup() {
         </div>
     )
 }
-
 export default Singup;

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bootstrap";
-
+import { Alert, Button, Modal, Row, Col, Form} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios";
 
@@ -10,9 +9,7 @@ function AddActionPanel(props) {
         actionType: "",
         date:""
     })
-    
     const sendActionData = (e) =>{
-
         axios.post(
             `http://localhost:5050/api/action/add/${props.clientData._id}`,
          actionData,
@@ -26,14 +23,9 @@ function AddActionPanel(props) {
         props.getClient()
         props.setActionPanelModal(false)
     }
-
     const setActionState = (e) => {
         setActionData({...actionData, [e.target.id]: e.target.value})
     }
-
-
-
-
     return (
         <div className="modal show" style={{ display: 'block', position: 'fixed' }}>
             <Modal.Dialog>
@@ -77,7 +69,5 @@ function AddActionPanel(props) {
             </Modal.Dialog>
         </div>
     )
-
 }
-
 export default AddActionPanel

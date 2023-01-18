@@ -1,48 +1,48 @@
 import React, { useState } from "react";
 import { Container, Button, Form, Alert, Row, Col } from "react-bootstrap";
 import axios from "axios";
-
 import 'bootstrap/dist/css/bootstrap.css'
 import './AddClientPanel.css'
 import { useNavigate } from "react-router-dom";
 
+function AddClientPanel(props) {
 
-
-
-
-function AddClienPanel(props) {
-
-    const [companyName, setCompanyName] = useState();
-    const [city, setCity] = useState();
-    const [number, setNumber] = useState();
-    const [street, setStreet] = useState();
-    const [zipCode, setZipCode] = useState();
-    const [phone, setPhone] = useState();
-    const [email, setEmail] = useState();
-    const [nip, setNip] = useState();
-
+    const [company, setCompany] = useState(
+        {
+            companyName: "",
+            address:{
+                city: "",
+                number:"",
+                street:"",
+                zipCode:"",
+            },
+            email:"",
+            phone:"",
+            nip:""
+        }
+    )
 
     const navigate = useNavigate();
     const [error, setError] = useState("")
 
-    const setCompayState = (e) => {
+    const setCompanyState = (e) => {
         const { id, value } = e.target
 
         if (id === "companyName") {
-            setCompanyName(value)
+            setCompany((prevState)=>({...prevState, companyName:value}))
         }
         if (id === "city") {
-            setCity(value)
+            setCompany((prevState)=>({...prevState, address:{...prevState.address, city:value}}))
         }
         if (id === "number") {
-            setNumber(value)
+            setCompany((prevState)=>({...prevState, address:{...prevState.address, number:value}}))
         }
         if (id === "street") {
-            setStreet(value)
+            setCompany((prevState)=>({...prevState, address:{...prevState.address, street:value}}))
         }
         if (id === "zipCode") {
             if (/[0-9]{2}[-][0-9]{3}/.test(value)) {
-                setZipCode(value)
+                setCompany((prevState)=>({...prevState, address:{...prevState.address, zipCode:value}}))
                 setError()
             } else {
                 setError("Incorrect zip code")
@@ -50,7 +50,7 @@ function AddClienPanel(props) {
         }
         if (id === "phone") {
             if (/^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{3})$/.test(value)) {
-                setPhone(value)
+                setCompany((prevState)=>({...prevState, phone:value}))
                 setError()
             } else {
                 setError("Incorrect phone number format")
@@ -58,7 +58,7 @@ function AddClienPanel(props) {
         }
         if (id === "email") {
             if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-                setEmail(value)
+                setCompany((prevState)=>({...prevState, email:value}))
                 setError()
             } else {
                 setError("Incorrect email address format!")
@@ -67,35 +67,20 @@ function AddClienPanel(props) {
         if (id === "nip") {
             if (value.length < 10) {
                 setError("NIP code too short")
-            } else if (value.length  > 10) {
+            } else if (value.length > 10) {
                 setError("NIP code too long")
             } else {
-                setNip(value)
+                setCompany((prevState)=>({...prevState, nip:value}))
                 setError()
             }
         }
     }
 
-
     const addNewCompany = (e) => {
         e.preventDefault()
-        let companyDataObj = {
-            companyName: companyName,
-            address: {
-                city: city,
-                number: number,
-                street: street,
-                zipCode: zipCode,
-            },
-            phone: phone,
-            email: email,
-            nip: nip,
-            action: []
-        }
-
         axios.post(
             'http://localhost:5050/api/client/add',
-            companyDataObj,
+            company,
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res);
@@ -109,11 +94,6 @@ function AddClienPanel(props) {
         }).catch((res, err) => {
             console.log(res, err);
         })
-
-
-        console.log(companyDataObj);
-
-
     }
 
     return (
@@ -129,7 +109,7 @@ function AddClienPanel(props) {
                             <Col>
                                 <Form.Group>
                                     <Form.Label><h5>Companny Name:</h5></Form.Label>
-                                    <Form.Control type="text" id="companyName" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="text" id="companyName" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -140,31 +120,31 @@ function AddClienPanel(props) {
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Street:</Form.Label>
-                                    <Form.Control type="text" id="street" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="text" id="street" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Number:</Form.Label>
-                                    <Form.Control type="text" id="number" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="text" id="number" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>ZIP:</Form.Label>
-                                    <Form.Control type="text" id="zipCode" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="text" id="zipCode" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>City:</Form.Label>
-                                    <Form.Control type="text" id="city" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="text" id="city" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Phone number:</Form.Label>
-                                    <Form.Control type="text" id="phone" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="text" id="phone" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Email:</Form.Label>
-                                    <Form.Control type="email" id="email" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="email" id="email" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -174,7 +154,7 @@ function AddClienPanel(props) {
                             <Col>
                                 <Form.Group>
                                     <h5>NIP-code:</h5>
-                                    <Form.Control type="number" id="nip" onChange={(e) => setCompayState(e)} />
+                                    <Form.Control type="number" id="nip" onChange={(e) => setCompanyState(e)} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -187,5 +167,4 @@ function AddClienPanel(props) {
         </div>
     )
 }
-
-export default AddClienPanel;
+export default AddClientPanel;

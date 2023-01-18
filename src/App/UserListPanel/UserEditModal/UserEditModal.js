@@ -1,23 +1,25 @@
 import React from "react";
 import { useState } from "react";
-import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bootstrap";
-import { Multiselect } from "react-widgets";
-
+import { Button, Modal, Form} from "react-bootstrap";
+import { MultiSelect } from "react-multi-select-component";
 import 'bootstrap/dist/css/bootstrap.css'
-import "react-widgets/styles.css";
 import "./UserEditModal.css"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function UserEditModal(props) {
-
     const [userId, setUserId] = useState(props.userEditData._id)
     const [username, setUsername] = useState(props.userEditData.username);
     const [email, setEmail] = useState(props.userEditData.email);
     const [phone, setPhone] = useState(props.userEditData.phone);
     const [permission, setPermission] = useState(props.userEditData.permission);
+    const [permissionLable, setPermissionLable] = useState(props.userEditData.permission.map((obj)=>{return {label:obj, value:obj}}));
     const [error, setError] = useState()
-
+    const options = [
+        { label: "User", value: "user" },
+        { label: "Manager", value: "manager" },
+        { label: "Admin", value: "admin"},
+      ]
     const navigate = useNavigate()
 
     const setUserState = (e) => {
@@ -39,7 +41,6 @@ function UserEditModal(props) {
             }
         }
     }
-
     const sendUserData = () => {
         let userObj = {
             email: email,
@@ -55,8 +56,10 @@ function UserEditModal(props) {
             setError(err)
         })
     }
-
-
+    const setPermissionData = (e) => {
+        setPermission(e.map((opt)=>opt.value))
+        setPermissionLable(e)
+    }
     return (
         <div
             className="modal show"
@@ -78,7 +81,7 @@ function UserEditModal(props) {
                             <Form.Label>Phone:</Form.Label>
                             <Form.Control type="tel" id="phone" defaultValue={phone} onChange={(e) => setUserState(e)} />
                             <Form.Label>Permission:</Form.Label>
-                            <Multiselect defaultValue={permission} data={["user", "manager", "admin"]} onChange={(e) => setPermission(e)} required />
+                            <MultiSelect value={permissionLable} labelledBy="Select" options={options} onChange={(e)=>{setPermissionLable(e); setPermissionData(e)}} required />
                         </Form.Group>
                         <Button variant="warning" type="submit">Edit User</Button>
                         <Button variant="secondary" onClick={() => props.setUserEditModal(false)}>Back</Button>
@@ -87,7 +90,5 @@ function UserEditModal(props) {
             </Modal.Dialog>
         </div>
     )
-
 }
-
 export default UserEditModal;

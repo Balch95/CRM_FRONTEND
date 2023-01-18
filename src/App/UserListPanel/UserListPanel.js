@@ -1,11 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Container, Modal, Row, Col, Form, Table } from "react-bootstrap";
-
+import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.css'
 import UserEditModal from "./UserEditModal/UserEditModal";
-
-const permission = require('../middlewares/testPermision')
+import { testPermission } from "../helpservices/testPermision";
 
 function UserListPanel() {
 
@@ -14,7 +12,6 @@ function UserListPanel() {
     const [userEditData, setUserEditData] = useState()
 
     const userDown = (e) => {
-
         axios
             .get("http://localhost:5050/api/user/all")
             .then((res) => {
@@ -25,20 +22,15 @@ function UserListPanel() {
                 console.log(err)
             })
     }
-
-
     const userRemove = (id) => {
-
         axios
             .delete(`http://localhost:5050/api/user/remove/${id}`)
             .then(() => {
                 userDown()
             })
-    }
-
+    };
     let liElements = []
-
-    if(userList){
+    if (userList) {
         liElements = userList.map((listObj, index) => {
             return (
                 <tr key={listObj._id}>
@@ -46,24 +38,17 @@ function UserListPanel() {
                     <td>{listObj.username}</td>
                     <td>{listObj.email}</td>
                     <td>{listObj.phone}</td>
-                    {(permission.test('admin') || permission.test('manager')) && <td>{listObj.permission.map((data)=><li>{data}</li>)}</td>}
-                    {permission.test('admin') && <td><Button variant="warning" onClick={()=>{setUserEditData(listObj); setUserEditModal(true)}}>Edit User</Button></td>}
-                    {permission.test('admin') &&<td> <Button variant="danger" onClick={()=>{userRemove(listObj._id)}}>Delete User</Button></td>}
+                    {(testPermission('admin') || testPermission('manager')) && <td>{listObj.permission.map((data) => <li>{data}</li>)}</td>}
+                    {testPermission('admin') && <td><Button variant="warning" onClick={() => { setUserEditData(listObj); setUserEditModal(true) }}>Edit User</Button></td>}
+                    {testPermission('admin') && <td> <Button variant="danger" onClick={() => { userRemove(listObj._id) }}>Delete User</Button></td>}
                 </tr>
             )
         });
-    }
-  
-
+    };
     useEffect(() => {
         userDown()
 
     }, [])
-
-    console.log(userEditData)
-
-    permission.test()
-
     return (
         <Container>
             <h2>User List Panel</h2>
@@ -76,7 +61,7 @@ function UserListPanel() {
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                {(permission.test('admin')||permission.test('manager')) && <th>Permission</th>}
+                                {(testPermission('admin') || testPermission('manager')) && <th>Permission</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -85,9 +70,8 @@ function UserListPanel() {
                     </Table>
                 </Col>
             </Row>
-            {userEditModal && <UserEditModal userEditData={userEditData} userEditModal={userEditModal} setUserEditModal={setUserEditModal}/>}
+            {userEditModal && <UserEditModal userEditData={userEditData} userEditModal={userEditModal} setUserEditModal={setUserEditModal} />}
         </Container>
     )
 }
-
 export default UserListPanel;

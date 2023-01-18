@@ -1,29 +1,23 @@
 import React, { useState } from "react";
 import { Button,  Modal, Form } from "react-bootstrap";
 import { useCookies } from 'react-cookie';
-
 import './LoginModal.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from "axios";
 
 function LoginModal(props) {
-
     const [loginValue, setLoginValue] = useState({
         username: "",
         password: ""
     })
     const [cookies, setCookie] = useCookies(['jwt_user'])
     const [error, setError] = useState();
-
-
     const cookiesSet = (jwt) => {
         setCookie('TokenTime', jwt, {path: '/', maxAge: 600})
     }
-
     const setData = (e) => {
         setLoginValue({...loginValue, [e.target.id]: e.target.value})
     }
-
     const sendLogin = (e) => {
         e.preventDefault()
         axios.post(
@@ -47,7 +41,6 @@ function LoginModal(props) {
                 console.log(err)
             })
     }
-
     return (
         <div
             className="modal show"
@@ -77,7 +70,5 @@ function LoginModal(props) {
             </Modal.Dialog>
         </div>
     )
-
 }
-
 export default LoginModal;
