@@ -28,7 +28,7 @@ function SingleClientPanel() {
             phone:"",
             nip:""
     })
-    const [action, setAction] = useState([]);
+    const [action] = useState([]);
     let { id } = useParams();
 
     const setCompanyData = (e) => {

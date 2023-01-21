@@ -7,29 +7,34 @@ import { useNavigate } from "react-router-dom";
 
 
 function Singup() {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
-    const [confirmPassword, setConfirmPassword] = useState();
-    const [email, setEmail] = useState();
-    const [phone, setPhone] = useState();
+
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [permission, setPermission] = useState([]);
     const [permissionLable, setPermissionLable] = useState([])
-    const [error, setError] = useState();
+    const [error, setError] = useState("");
+    const [userData, setUserData] = useState({
+        username: "",
+        password: "",
+        email: "",
+        phone: "",
+        permission: permission
+    })
     const navigate = useNavigate();
     const options = [
         { label: "User", value: "user" },
         { label: "Manager", value: "manager" },
-        { label: "Admin", value: "admin"},
-      ]
+        { label: "Admin", value: "admin" },
+    ]
 
     const setUserState = (e) => {
+        console.log(userData)
         const { id, value } = e.target;
         if (id === "username") {
             if (value.length <= 4) {
                 setError("Username too short. Minimum length 4 characters.")
             } else {
                 if (/^[^\s]*$/.test(value)) {
-                    setUsername(value)
+                    setUserData((prevState) => ({ ...prevState, username: value }))
                     setError()
                 } else {
                     setError("Unauthorized user name! Contains empty characters!")
@@ -50,7 +55,7 @@ function Singup() {
         }
         if (id === "email") {
             if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-                setEmail(value)
+                setUserData((prevState) => ({ ...prevState, email: value }))
                 setError()
             } else {
                 setError("Incorrect email address format!")
@@ -58,7 +63,7 @@ function Singup() {
         }
         if (id === "phone") {
             if (/^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{3})$/.test(value)) {
-                setPhone(value)
+                setUserData((prevState) => ({ ...prevState, phone: value }))
                 setError()
             } else {
                 setError("Incorrect phone number format")
@@ -73,9 +78,9 @@ function Singup() {
             }
 
         }
-        if(id === "confirmPassword"){
-            if(confirmPassword === value){
-                setPassword(value);
+        if (id === "confirmPassword") {
+            if (confirmPassword === value) {
+                setUserData((prevState) => ({ ...prevState, password: value }));
                 setError()
             } else {
                 setError("Passwords are not the same!")
@@ -83,35 +88,29 @@ function Singup() {
         }
     }
     const setPermissionData = (e) => {
-        setPermission(e.map((opt)=>opt.value))
-        setPermissionLable(e)
+        setUserData((prevState) => ({ ...prevState, permission: (e.map((opt) => opt.value)) }));
+        setPermissionLable(e);
     }
-    const singupNewUser = () => {
-        let userObj = {
-            username: username,
-            password: password,
-            email: email,
-            phone: phone,
-            permission: permission
-        }
-        if(userObj.password && userObj.username && userObj.email && userObj.phone && userObj.permission){
+    const singupNewUser = (e) => {
+        e.preventDefault()
+        if (userData.password && userData.username && userData.email && userData.phone && userData.permission) {
             setError()
-        axios.post(
-            'http://localhost:5050/api/user/singup',
-            userObj,
-        ).then((res) => {
-            if (res.status === 200) {
-                console.log(res);
-                navigate("/UserList")
-            }
-            if (res.status === 201) {
-                setError(res.data.message)
-                console.log(res.data.message)
-            }
+            axios.post(
+                'http://localhost:5050/api/user/singup',
+                userData,
+            ).then((res) => {
+                if (res.status === 200) {
+                    console.log(res);
+                    navigate("/UserList")
+                }
+                if (res.status === 201) {
+                    setError(res.data.message)
+                    console.log(res.data.message)
+                }
 
-        }).catch((res, err) => {
-            console.log(res, err);
-        })
+            }).catch((res, err) => {
+                console.log(res, err);
+            })
         } else {
             setError('Please check the form')
         }
@@ -122,7 +121,7 @@ function Singup() {
                 <Alert variant="primary">
                     <h4>Add new user</h4>
                     <h5 className="error">{error}</h5>
-                    <Form onSubmit={() => singupNewUser()}>
+                    <Form onSubmit={(e) => singupNewUser(e)}>
                         <Row>
                             <Col>
                                 <Form.Group>
@@ -149,7 +148,7 @@ function Singup() {
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Permission:</Form.Label>
-                                    <MultiSelect value={permissionLable} labelledBy="Select" options={options} onChange={(e)=>{setPermissionLable(e); setPermissionData(e)}} required />
+                                    <MultiSelect value={permissionLable} labelledBy="Select" options={options} onChange={(e) => { setPermissionLable(e); setPermissionData(e) }} required />
                                 </Form.Group>
                             </Col>
                         </Row>

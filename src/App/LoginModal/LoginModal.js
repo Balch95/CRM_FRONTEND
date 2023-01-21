@@ -31,7 +31,6 @@ function LoginModal(props) {
                if(res.status === 200){
                 localStorage.setItem('jwt_user', JSON.stringify(res.data.jwt))
                 localStorage.setItem('userPermission', JSON.stringify(res.data.userPermission))
-                console.log(res)
                 setError("");
                 cookiesSet(res.data.jwt);
                 window.location.reload()
