@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/https://balch95.github.io/crmapp/static/css/main.3b483a09.css",
+    "main.js": "/https://balch95.github.io/crmapp/static/js/main.065c95a3.js",
+    "static/js/787.f2c53e0f.chunk.js": "/https://balch95.github.io/crmapp/static/js/787.f2c53e0f.chunk.js",
+    "index.html": "/https://balch95.github.io/crmapp/index.html",
+    "main.3b483a09.css.map": "/https://balch95.github.io/crmapp/static/css/main.3b483a09.css.map",
+    "main.065c95a3.js.map": "/https://balch95.github.io/crmapp/static/js/main.065c95a3.js.map",
+    "787.f2c53e0f.chunk.js.map": "/https://balch95.github.io/crmapp/static/js/787.f2c53e0f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3b483a09.css",
+    "static/js/main.065c95a3.js"
+  ]
+}
