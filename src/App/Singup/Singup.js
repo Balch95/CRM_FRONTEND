@@ -96,12 +96,12 @@ function Singup() {
         if (userData.password && userData.username && userData.email && userData.phone && userData.permission) {
             setError()
             axios.post(
-                'http://localhost:5050/api/user/singup',
+                'http://crmapp.server775408.nazwa.pl/api/user/singup',
                 userData,
             ).then((res) => {
                 if (res.status === 200) {
                     console.log(res);
-                    navigate("/UserList")
+                    navigate("/CRM_FRONTEND/UserList")
                 }
                 if (res.status === 201) {
                     setError(res.data.message)

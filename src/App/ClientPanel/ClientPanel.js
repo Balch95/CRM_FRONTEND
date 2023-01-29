@@ -12,7 +12,7 @@ function ClientPanel(props) {
     const [clientList, setClientList] = useState([]);
     const clientDown = (e) => {
         axios
-            .get("http://localhost:5050/api/client/all")
+            .get("http://crmapp.server775408.nazwa.pl/api/client/all")
             .then((res) => {
                 setClientList(res.data);
                 console.log(res);
@@ -23,7 +23,7 @@ function ClientPanel(props) {
     }
     const clientDelete = (e, id) => {
         axios
-            .delete(`http://localhost:5050/api/client/remove/${id}`)
+            .delete(`http://crmapp.server775408.nazwa.pl/api/client/remove/${id}`)
             .then(() => {
                 clientDown()
             })
@@ -33,7 +33,7 @@ function ClientPanel(props) {
     }, [])
     const navigate = useNavigate()
     const SingleClientButton = (id) => {
-        navigate(`SingleClient/${id}`)
+        navigate(`/CRM_FRONTEND/SingleClient/${id}`)
     }
     let liElements = [];
     if(!clientList.message){

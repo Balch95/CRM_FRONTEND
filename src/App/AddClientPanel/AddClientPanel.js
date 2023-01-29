@@ -79,12 +79,12 @@ function AddClientPanel(props) {
     const addNewCompany = (e) => {
         e.preventDefault()
         axios.post(
-            'http://localhost:5050/api/client/add',
+            'http://crmapp.server775408.nazwa.pl/api/client/add',
             company,
         ).then((res) => {
             if (res.status === 200) {
                 console.log(res);
-                navigate("/")
+                navigate("/CRM_FRONTEND")
             }
             if (res.status === 201) {
                 setError(res.data.message)

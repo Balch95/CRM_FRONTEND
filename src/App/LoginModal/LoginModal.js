@@ -21,7 +21,7 @@ function LoginModal(props) {
     const sendLogin = (e) => {
         e.preventDefault()
         axios.post(
-            'http://localhost:5050/api/user/login',
+            'http://crmapp.server775408.nazwa.pl/api/user/login',
             loginValue
             ).then((res)=>{
                if(res.status === 201){

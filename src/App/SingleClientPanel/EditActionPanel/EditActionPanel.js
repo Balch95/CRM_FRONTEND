@@ -12,7 +12,7 @@ function EditActionPanel(props) {
     
     const sendActionData = (e) => {
         axios.put(
-            `http://localhost:5050/api/action/update/${props.editActionData._id}`,
+            `http://crmapp.server775408.nazwa.pl/api/action/update/${props.editActionData._id}`,
             actionData,
         ).then((res) => {
             console.log(res)

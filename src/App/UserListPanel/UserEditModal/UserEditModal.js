@@ -45,7 +45,7 @@ function UserEditModal(props) {
     }
     const sendUserData = () => {
         axios.put(
-            `http://localhost:5050/api/user/update/${userId}`,
+            `http://crmapp.server775408.nazwa.pl/api/user/update/${userId}`,
             userData
         ).then((res) => {
             navigate("/UserList")

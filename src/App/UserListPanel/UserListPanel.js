@@ -13,7 +13,7 @@ function UserListPanel() {
 
     const userDown = (e) => {
         axios
-            .get("http://localhost:5050/api/user/all")
+            .get("http://crmapp.server775408.nazwa.pl/api/user/all")
             .then((res) => {
                 setUserList(res.data);
                 console.log(res);
@@ -24,7 +24,7 @@ function UserListPanel() {
     }
     const userRemove = (id) => {
         axios
-            .delete(`http://localhost:5050/api/user/remove/${id}`)
+            .delete(`http://crmapp.server775408.nazwa.pl/api/user/remove/${id}`)
             .then(() => {
                 userDown()
             })

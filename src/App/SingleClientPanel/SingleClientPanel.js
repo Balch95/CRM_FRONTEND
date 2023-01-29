@@ -83,7 +83,7 @@ function SingleClientPanel() {
     }
     const editCompany = () => {
         axios.put(
-            `http://localhost:5050/api/client/update/${id}`,
+            `http://crmapp.server775408.nazwa.pl/api/client/update/${id}`,
             companyEdit,
         ).then((res) => {
             console.log(res);
@@ -95,7 +95,7 @@ function SingleClientPanel() {
     };
     const getClient = () => {
         axios
-            .get(`http://localhost:5050/api/client/${id}`)
+            .get(`http://crmapp.server775408.nazwa.pl/api/client/${id}`)
             .then((res) => {
                 setClient(res.data)
                 setCompanyEdit(res.data)
@@ -106,7 +106,7 @@ function SingleClientPanel() {
     }
     const deleteAction = (clientActionId) => {
         axios.delete(
-            `http://localhost:5050/api/action/remove/${client.data._id}`,
+            `https://crmapp.server775408.nazwa.pl/api/action/remove/${client.data._id}`,
             {
                 data: { clientActionId: clientActionId }
             }

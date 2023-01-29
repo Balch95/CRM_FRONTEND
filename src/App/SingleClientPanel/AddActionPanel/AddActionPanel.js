@@ -11,7 +11,7 @@ function AddActionPanel(props) {
     })
     const sendActionData = (e) =>{
         axios.post(
-            `http://localhost:5050/api/action/add/${props.clientData._id}`,
+            `http://crmapp.server775408.nazwa.pl/api/action/add/${props.clientData._id}`,
          actionData,
         ).then((res) => {
             console.log(res)
