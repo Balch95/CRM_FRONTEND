@@ -20,6 +20,8 @@ function App() {
   axios.defaults.headers.common['x-auth-token'] = user;
  
   const logout = () => {
+    console.log('LogoutClikc')
+    console.log(cookie.TokenTime)
     removeCookie("TokenTime")
     localStorage.clear();
   }
@@ -32,15 +34,15 @@ function App() {
           <Navbar.Brand>CRMApp</Navbar.Brand>
           <Nav>
             <Nav.Link to="/CRM_FRONTEND/" as={Link}><Button variant="success">Home</Button></Nav.Link>
-            {(testPermission('admin')||testPermission('manager')) && <Nav.Link to="/CRM_FRONTEND//AddClientPanel" as={Link}><Button variant="success">Add client</Button></Nav.Link>}
+            {(testPermission('admin')||testPermission('manager')) && <Nav.Link to="/CRM_FRONTEND/AddClientPanel" as={Link}><Button variant="success">Add client</Button></Nav.Link>}
             {<Nav.Link to="/CRM_FRONTEND//UserList" as={Link}><Button variant="success">User List</Button></Nav.Link>}
-            {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Nav.Link to="/CRM_FRONTEND//Singup" as={Link}><Button variant="warning">Add user</Button></Nav.Link>}
+            {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Nav.Link to="/CRM_FRONTEND/Singup" as={Link}><Button variant="warning">Add user</Button></Nav.Link>}
             <Nav.Link onClick={() => logout()}><Button variant="secondary">Logout</Button></Nav.Link>
           </Nav>
         </Container>
       </Navbar>}
       {cookie.TokenTime && <Routes>
-        <Route path="/CRM_FRONTEND" element={<ClientPanel/>} />
+        <Route path="/CRM_FRONTEND/" element={<ClientPanel/>} />
         {<Route path="/CRM_FRONTEND/AddClientPanel" element={<AddClientPanel />} />}
         <Route path="/CRM_FRONTEND/SingleClient/:id" element={<SingleClientPanel />} />
         {JSON.parse(localStorage.getItem("userPermission")).includes("admin") && <Route path="/CRM_FRONTEND/Singup" element={<Singup />} />}

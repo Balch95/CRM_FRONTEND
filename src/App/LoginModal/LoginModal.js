@@ -13,7 +13,7 @@ function LoginModal(props) {
     const [cookies, setCookie] = useCookies(['jwt_user'])
     const [error, setError] = useState();
     const cookiesSet = (jwt) => {
-        setCookie('TokenTime', jwt, {path: '/', maxAge: 600})
+        setCookie('TokenTime', jwt, {path: '/CRM_FRONTEND/', maxAge: 600})
     }
     const setData = (e) => {
         setLoginValue({...loginValue, [e.target.id]: e.target.value})
